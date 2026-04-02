@@ -1,0 +1,7 @@
+web: bench serve --port 8000
+socketio: node /home/arctic_crystal/Repositories/Custom_ERPNext_Erpnext/ERP_Frappe/socketio.js
+watch: bench watch
+schedule: bench schedule
+worker_short: bench worker --queue short
+worker_long: bench worker --queue long
+worker_default: bench worker --queue default

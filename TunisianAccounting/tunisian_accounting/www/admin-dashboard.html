@@ -1,0 +1,164 @@
+{% extends "templates/base.html" %}
+{% block content %}
+
+<div style="max-width:800px; margin:2rem auto; padding:1rem;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+    <h3>Admin Dashboard</h3>
+    <a href="/app" class="btn btn-sm btn-outline-primary">Go to ERPNext</a>
+  </div>
+
+  <!-- Pending Requests -->
+  <h5>Pending Access Requests</h5>
+  <div id="requests-list">Loading...</div>
+
+  <!-- Token Modal -->
+  <div id="token-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+       background:rgba(0,0,0,0.5); z-index:999; align-items:center; justify-content:center;">
+    <div style="background:white; padding:2rem; border-radius:12px; max-width:400px; width:90%; text-align:center;">
+      <h5>Access Approved ✅</h5>
+      <p class="text-muted">Share this token with the employee:</p>
+      <div style="background:#f4f4f4; padding:1rem; border-radius:8px; font-family:monospace;
+                  font-size:1.1rem; letter-spacing:2px; margin-bottom:1rem;" id="token-display"></div>
+      <button onclick="copyToken()" class="btn btn-primary btn-block mb-2">Copy Token</button>
+      <button onclick="closeModal()" class="btn btn-secondary btn-block">Close</button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- Active Employees -->
+  <h5>Active Employees</h5>
+  <div id="employees-list">Loading...</div>
+</div>
+
+<script>
+function loadRequests() {
+  fetch('/api/method/tunisian_accounting.api.auth.get_access_requests')
+  .then(r => r.json())
+  .then(data => {
+    const list = document.getElementById('requests-list');
+    if (!data.message || !data.message.length) {
+      list.innerHTML = '<p class="text-muted">No pending requests</p>';
+      return;
+    }
+    list.innerHTML = data.message.map(req => `
+      <div style="border:1px solid #eee; padding:1rem; border-radius:8px; margin-bottom:0.5rem;
+                  display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>${req.fullname}</strong> — ${req.email}
+          <br/><small class="text-muted">${req.role || 'No role specified'}</small>
+        </div>
+        <div>
+          <button onclick="approveRequest('${req.name}')" class="btn btn-sm btn-success mr-2">
+            Approve & Generate Token
+          </button>
+          <button onclick="rejectRequest('${req.name}')" class="btn btn-sm btn-danger">Reject</button>
+        </div>
+      </div>
+    `).join('');
+  });
+}
+
+function loadEmployees() {
+  fetch('/api/method/tunisian_accounting.api.auth.get_employees')
+  .then(r => r.json())
+  .then(data => {
+    const list = document.getElementById('employees-list');
+    if (!data.message || !data.message.length) {
+      list.innerHTML = '<p class="text-muted">No employees yet</p>';
+      return;
+    }
+    list.innerHTML = data.message.map(emp => `
+      <div style="border:1px solid #eee; padding:1rem; border-radius:8px; margin-bottom:0.5rem;
+                  display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>${emp.full_name}</strong> — ${emp.email}
+          <br/><small class="text-muted">
+            ${emp.api_key
+              ? 'Token: <code>' + emp.api_key + '</code>'
+              : '<span style="color:#e74c3c">No token yet</span>'}
+          </small>
+        </div>
+        <button onclick="regenToken('${emp.name}', '${emp.full_name}')"
+                class="btn btn-sm btn-outline-secondary">
+          Regenerate Token
+        </button>
+      </div>
+    `).join('');
+  });
+}
+
+function approveRequest(name) {
+  fetch('/api/method/tunisian_accounting.api.auth.approve_request', {
+    method: 'POST',
+    headers: { 
+        'Content-Type': 'application/json', 
+        'X-Frappe-CSRF-Token': frappe.csrf_token 
+    },
+    body: JSON.stringify({ request_name: name })
+  })
+  .then(r => r.json())
+  .then(data => {
+    // DEBUG: See what the server says in the browser console (F12)
+    console.log("Server Response:", data);
+
+    if (data.message) {
+        showToken(data.message); // Show the token string
+    } else if (data._server_messages) {
+        alert("Error from server: " + data._server_messages);
+    } else {
+        alert("Something went wrong. Check browser console.");
+    }
+    
+    loadRequests();
+    loadEmployees();
+  })
+  .catch(err => {
+    console.error("Fetch Error:", err);
+  });
+}
+
+function rejectRequest(name) {
+  fetch('/api/method/tunisian_accounting.api.auth.reject_request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': frappe.csrf_token },
+    body: JSON.stringify({ request_name: name })
+  })
+  .then(r => r.json())
+  .then(() => loadRequests());
+}
+
+function regenToken(email, name) {
+  if (!confirm('Regenerate token for ' + name + '? Old token will stop working.')) return;
+  fetch('/api/method/tunisian_accounting.api.auth.generate_employee_token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': frappe.csrf_token },
+    body: JSON.stringify({ user_email: email })
+  })
+  .then(r => r.json())
+  .then(data => {
+    showToken(data.message);
+    loadEmployees();
+  });
+}
+
+function showToken(token) {
+  document.getElementById('token-display').innerText = token;
+  const modal = document.getElementById('token-modal');
+  modal.style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('token-modal').style.display = 'none';
+}
+
+function copyToken() {
+  const token = document.getElementById('token-display').innerText;
+  navigator.clipboard.writeText(token);
+  alert('Token copied!');
+}
+
+loadRequests();
+loadEmployees();
+</script>
+{% endblock %}

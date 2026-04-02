@@ -1,0 +1,121 @@
+{% extends "templates/base.html" %}
+{% block content %}
+<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:90vh; background:#f8f9fa;">
+    <div style="background:white; padding:2.5rem; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.05); max-width:420px; width:100%;">
+        <img src="/assets/erpnext/images/erpnext-logo.svg" style="width:120px; margin-bottom:2rem; display:block; margin-left:auto; margin-right:auto;"/>
+        
+        <!-- Tab Navigation -->
+        <div style="display:flex; margin-bottom:2rem; border-bottom:1px solid #ddd;">
+            <button onclick="showTab('login')" id="btn-login" style="flex:1; padding:10px; border:none; background:none; border-bottom:2px solid #007bff; font-weight:bold; cursor:pointer;">Login</button>
+            <button onclick="showTab('daily')" id="btn-daily" style="flex:1; padding:10px; border:none; background:none; color:#666; cursor:pointer;">Get Token</button>
+            <button onclick="showTab('req')" id="btn-req" style="flex:1; padding:10px; border:none; background:none; color:#666; cursor:pointer;">Register</button>
+        </div>
+
+        <!-- Tab 1: Login -->
+        <div id="tab-login">
+            <input type="text" id="token-input" placeholder="Paste daily token" class="form-control mb-3" style="height:50px; text-align:center; font-family:monospace;"/>
+            <button onclick="loginWithToken()" class="btn btn-primary btn-block" style="height:50px;">Enter System</button>
+        </div>
+
+        <!-- Tab 2: Get Daily Token -->
+        <div id="tab-daily" style="display:none;">
+            <p class="small text-muted">A token will be sent to your registered email.</p>
+            <input type="email" id="daily-email" placeholder="Your email address" class="form-control mb-3"/>
+            <button onclick="getDailyToken()" id="btn-send" class="btn btn-outline-primary btn-block">Send Daily Token</button>
+        </div>
+
+        <!-- Tab 3: Request Access -->
+        <div id="tab-req" style="display:none;">
+            <p class="small text-muted">Register to request access from the admin.</p>
+            <!-- CHECK THESE IDs MATCH THE JS BELOW -->
+            <input type="text" id="req-name" placeholder="Full Name" class="form-control mb-2"/>
+            <input type="email" id="req-email" placeholder="Email" class="form-control mb-3"/>
+            <button onclick="requestAccess()" class="btn btn-success btn-block">Request Access</button>
+        </div>
+        
+        <div id="msg-box" style="margin-top:1.5rem; display:none;" class="alert"></div>
+    </div>
+</div>
+
+<div style="position:fixed; bottom:20px; right:20px;"><a href="/admin-login" class="text-muted small">Admin Access</a></div>
+
+<script>
+function showTab(t) {
+    ['login', 'daily', 'req'].forEach(id => {
+        document.getElementById('tab-'+id).style.display = (id === t) ? 'block' : 'none';
+        document.getElementById('btn-'+id).style.borderBottom = (id === t) ? '2px solid #007bff' : 'none';
+        document.getElementById('btn-'+id).style.color = (id === t) ? '#000' : '#666';
+    });
+}
+
+function getDailyToken() {
+    const email = document.getElementById('daily-email').value;
+    const btn = document.getElementById('btn-send');
+    if (!email) { alert("Please enter email"); return; }
+    
+    btn.disabled = true; btn.innerText = "Sending...";
+    fetch('/api/method/tunisian_accounting.api.auth.request_daily_token', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': frappe.csrf_token},
+        body: JSON.stringify({ email })
+    }).then(r => r.json()).then(d => {
+        const msg = document.getElementById('msg-box');
+        msg.style.display = 'block';
+        msg.className = "alert alert-success";
+        msg.innerText = "Check your email! Token sent.";
+        btn.disabled = false; btn.innerText = "Send Daily Token";
+    });
+}
+
+function loginWithToken() {
+    const token = document.getElementById('token-input').value.trim();
+    if (!token) { alert("Please enter token"); return; }
+    
+    // Check if CSRF exists, if not, use empty (API will allow guest)
+    const csrf = (window.frappe && frappe.csrf_token) ? frappe.csrf_token : '';
+
+    fetch('/api/method/tunisian_accounting.api.auth.login_with_token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Frappe-CSRF-Token': csrf
+        },
+        body: JSON.stringify({ token: token })
+    })
+    .then(r => r.json())
+    .then(d => {
+        // Handle the new response format
+        if (d.message && d.message.status === 'success') {
+            window.location.href = '/app';
+        } else {
+            alert(d.message ? d.message.message : "Invalid Token");
+        }
+    })
+    .catch(err => {
+        console.error("Login Error:", err);
+        alert("Server communication error.");
+    });
+}
+    
+function requestAccess() {
+    // These IDs MUST match the HTML above
+    const fullname = document.getElementById('req-name').value;
+    const email = document.getElementById('req-email').value;
+    
+    if (!fullname || !email) { alert("Please fill both fields"); return; }
+
+    fetch('/api/method/tunisian_accounting.api.auth.request_access', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': frappe.csrf_token},
+        body: JSON.stringify({ fullname, email })
+    }).then(r => r.json()).then(d => {
+        const msg = document.getElementById('msg-box');
+        msg.style.display = 'block';
+        msg.className = "alert alert-success";
+        msg.innerText = "Request Sent Successfully!";
+    }).catch(err => {
+        alert("Error sending request");
+    });
+}
+</script>
+{% endblock %}

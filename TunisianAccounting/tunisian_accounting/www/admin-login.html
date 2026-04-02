@@ -1,0 +1,30 @@
+{% extends "templates/base.html" %}
+{% block content %}
+
+<div style="display:flex; align-items:center; justify-content:center; min-height:100vh;">
+  <div style="max-width:400px; width:100%; padding:2rem; text-align:center;">
+    <h3>Admin Login</h3>
+    <input type="text" id="usr" placeholder="Username" class="form-control mb-2"/>
+    <input type="password" id="pwd" placeholder="Password" class="form-control mb-3"/>
+    <button onclick="adminLogin()" class="btn btn-primary btn-block">Login</button>
+  </div>
+</div>
+
+<script>
+function adminLogin() {
+  fetch('/api/method/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      usr: document.getElementById('usr').value,
+      pwd: document.getElementById('pwd').value
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.message === 'Logged In') { window.location.href = '/admin-dashboard'; }
+    else { alert('Invalid credentials'); }
+  });
+}
+</script>
+{% endblock %}

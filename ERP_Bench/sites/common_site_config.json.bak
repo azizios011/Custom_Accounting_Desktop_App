@@ -1,0 +1,6 @@
+{
+ "background_workers": 1,
+ "db_host": "localhost",
+ "default_site": "mysite.local",
+ "webserver_port": 8000
+}

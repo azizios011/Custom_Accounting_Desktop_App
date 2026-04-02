@@ -1,0 +1,37 @@
+{
+    "country_code": "tn",
+    "name": "Plan Comptable Tunisien (PCT)",
+    "tree": {
+        "1 Capitaux Propres et Passifs Non Courants": {
+            "10 Capital": { "account_type": "Equity" },
+            "11 Réserves": { "account_type": "Equity" },
+            "13 Emprunts": { "account_type": "Liability" }
+        },
+        "2 Immobilisations": {
+            "21 Immobilisations Incorporelles": { "account_type": "Asset" },
+            "22 Immobilisations Corporelles": { "account_type": "Asset" }
+        },
+        "3 Stocks": {
+            "31 Matières Premières": { "account_type": "Stock" },
+            "37 Marchandises": { "account_type": "Stock" }
+        },
+        "4 Comptes de Tiers": {
+            "40 Fournisseurs": { "account_type": "Payable" },
+            "41 Clients": { "account_type": "Receivable" },
+            "43 État": { "account_type": "Tax" }
+        },
+        "5 Comptes Financiers": {
+            "53 Caisse": { "account_type": "Cash" },
+            "54 Banque": { "account_type": "Bank" }
+        },
+        "6 Charges": {
+            "60 Achats": { "account_type": "Expense" },
+            "61 Services Extérieurs": { "account_type": "Expense" },
+            "64 Impôts et Taxes": { "account_type": "Expense" }
+        },
+        "7 Produits": {
+            "70 Ventes": { "account_type": "Income" },
+            "71 Production Stockée": { "account_type": "Income" }
+        }
+    }
+}
