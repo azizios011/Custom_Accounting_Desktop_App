@@ -1,0 +1,56 @@
+{% extends "templates/base.html" %}
+{% block content %}
+
+<div class="login-content flex flex-col items-center justify-center min-h-screen">
+
+  <!-- Employee Token Login -->
+  <div class="token-box text-center p-8">
+    <img src="/assets/erpnext/images/erpnext-logo.svg" style="width:150px" class="mb-6"/>
+    <h2>Welcome</h2>
+    <p>Enter your access token provided by your admin</p>
+
+    <input type="text" id="token-input" 
+           placeholder="Paste your token here" 
+           class="form-control mb-3"/>
+
+    <button onclick="loginWithToken()" class="btn btn-primary btn-lg w-100">
+      Login with Token
+    </button>
+  </div>
+
+  <!-- Admin Login Button (bottom right) -->
+  <div style="position:fixed; bottom:20px; right:20px;">
+    <a href="/admin-login" class="btn btn-sm btn-secondary">
+      Admin Login
+    </a>
+  </div>
+
+</div>
+
+<script>
+function loginWithToken() {
+  const token = document.getElementById('token-input').value;
+  fetch('/api/method/tunisian_accounting.api.auth.login_with_token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: token })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.message === 'ok') {
+      window.location.href = '/app';
+    } else {
+      alert('Invalid token');
+    }
+  });
+}
+</script>
+
+{% endblock %}
+```
+
+---
+
+### Step 2 — Create Admin Login Page
+```
+ERP_Next/erpnext/www/admin-login.html
