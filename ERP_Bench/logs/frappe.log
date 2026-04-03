@@ -1,0 +1,95 @@
+2026-04-02 16:14:34,782 ERROR frappe Unable to load translations
+Site: 
+Form Dict: {}
+Traceback (most recent call last):
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/synchronization.py", line 40, in filelock
+    with _StrongFileLock(lock_path, timeout=timeout):
+         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Bench/env/lib/python3.14/site-packages/filelock/_api.py", line 393, in __enter__
+    self.acquire()
+    ~~~~~~~~~~~~^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Bench/env/lib/python3.14/site-packages/filelock/_api.py", line 358, in acquire
+    raise Timeout(lock_filename)  # noqa: TRY301
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+filelock._error.Timeout: The file lock '/home/arctic_crystal/Repositories/Custom_ERPNext_Erpnext/ERP_Bench/config/bench_build.lock' could not be acquired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/caching.py", line 65, in wrapper
+    return _cache[func][args_key]
+           ~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ((), <object object at 0x74bd4d380ec0>, frozenset({('_ensure_on_bench', True)}))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/translate.py", line 173, in get_all_translations
+    return frappe.cache.hget(MERGED_TRANSLATION_KEY, lang, generator=_merge_translations)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/redis_wrapper.py", line 253, in hget
+    value = generator()
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/translate.py", line 161, in _merge_translations
+    all_translations.update(get_translations_from_apps(lang))
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/translate.py", line 188, in get_translations_from_apps
+    for app in apps or frappe.get_installed_apps(_ensure_on_bench=True):
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/caching.py", line 71, in wrapper
+    return_val = func(*args, **kwargs)
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/__init__.py", line 918, in get_installed_apps
+    connect()
+    ~~~~~~~^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/__init__.py", line 250, in connect
+    assert db_name_, "site must be fully initialized, db_name missing"
+           ^^^^^^^^
+AssertionError: site must be fully initialized, db_name missing
+2026-04-02 16:14:34,789 ERROR frappe Unable to load translations
+Site: 
+Form Dict: {}
+Traceback (most recent call last):
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/synchronization.py", line 40, in filelock
+    with _StrongFileLock(lock_path, timeout=timeout):
+         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Bench/env/lib/python3.14/site-packages/filelock/_api.py", line 393, in __enter__
+    self.acquire()
+    ~~~~~~~~~~~~^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Bench/env/lib/python3.14/site-packages/filelock/_api.py", line 358, in acquire
+    raise Timeout(lock_filename)  # noqa: TRY301
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+filelock._error.Timeout: The file lock '/home/arctic_crystal/Repositories/Custom_ERPNext_Erpnext/ERP_Bench/config/bench_build.lock' could not be acquired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/caching.py", line 65, in wrapper
+    return _cache[func][args_key]
+           ~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ((), <object object at 0x74bd4d380ec0>, frozenset({('_ensure_on_bench', True)}))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/translate.py", line 173, in get_all_translations
+    return frappe.cache.hget(MERGED_TRANSLATION_KEY, lang, generator=_merge_translations)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/redis_wrapper.py", line 253, in hget
+    value = generator()
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/translate.py", line 161, in _merge_translations
+    all_translations.update(get_translations_from_apps(lang))
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/translate.py", line 188, in get_translations_from_apps
+    for app in apps or frappe.get_installed_apps(_ensure_on_bench=True):
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/utils/caching.py", line 71, in wrapper
+    return_val = func(*args, **kwargs)
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/__init__.py", line 918, in get_installed_apps
+    connect()
+    ~~~~~~~^^
+  File "/home/arctic_crystal/Repositories/Custom_Accounting_Desktop_App/ERP_Frappe/frappe/__init__.py", line 250, in connect
+    assert db_name_, "site must be fully initialized, db_name missing"
+           ^^^^^^^^
+AssertionError: site must be fully initialized, db_name missing
+2026-04-03 09:17:19,203 ERROR frappe New Exception collected in error log
+Site: mysite.local
+Form Dict: {'report_name': 'Profit and Loss Statement', 'filters': '{"filter_based_on":"Fiscal Year","period_start_date":"2020-04-01","period_end_date":"2021-03-31","periodicity":"Yearly","include_default_book_entries":1}', 'ignore_prepared_report': '1', 'cmd': 'frappe.desk.query_report.run'}

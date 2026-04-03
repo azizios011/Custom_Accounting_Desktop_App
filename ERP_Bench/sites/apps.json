@@ -1,0 +1,12 @@
+{
+    "tunisian_accounting": {
+        "is_repo": true,
+        "resolution": {
+            "commit_hash": "b273fbc00bb34fc695c5002e0b7972ba3f7f805c",
+            "branch": "master"
+        },
+        "required": [],
+        "idx": 1,
+        "version": "0.0.1"
+    }
+}

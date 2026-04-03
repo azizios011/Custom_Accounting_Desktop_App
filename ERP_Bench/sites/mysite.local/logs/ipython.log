@@ -1,5 +1,0 @@
-2026-04-02 08:21:35,080 INFO ipython === bench console session ===
-2026-04-02 08:21:35,080 INFO ipython frappe.db.set_value("User", "Administrator", "new_password", "admin")
-frappe.db.commit()
-exit()
-2026-04-02 08:21:35,080 INFO ipython === session end ===

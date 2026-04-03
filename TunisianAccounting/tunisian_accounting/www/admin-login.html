@@ -7,23 +7,38 @@
     <input type="text" id="usr" placeholder="Username" class="form-control mb-2"/>
     <input type="password" id="pwd" placeholder="Password" class="form-control mb-3"/>
     <button onclick="adminLogin()" class="btn btn-primary btn-block">Login</button>
+    <div id="error-msg" style="margin-top:1rem; display:none;"></div>
   </div>
 </div>
 
 <script>
 function adminLogin() {
+  const usr = document.getElementById('usr').value;
+  const pwd = document.getElementById('pwd').value;
+
+  // Frappe login requires form-encoded data, not JSON
+  const formData = new FormData();
+  formData.append('usr', usr);
+  formData.append('pwd', pwd);
+
   fetch('/api/method/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      usr: document.getElementById('usr').value,
-      pwd: document.getElementById('pwd').value
-    })
+    body: formData
   })
   .then(r => r.json())
   .then(data => {
-    if (data.message === 'Logged In') { window.location.href = '/admin-dashboard'; }
-    else { alert('Invalid credentials'); }
+    if (data.message === 'Logged In') {
+      window.location.href = '/admin-dashboard';
+    } else {
+      const msg = document.getElementById('error-msg');
+      msg.style.display = 'block';
+      msg.innerHTML = '<div class="alert alert-danger">Invalid credentials</div>';
+    }
+  })
+  .catch(() => {
+    const msg = document.getElementById('error-msg');
+    msg.style.display = 'block';
+    msg.innerHTML = '<div class="alert alert-danger">Login failed. Try again.</div>';
   });
 }
 </script>

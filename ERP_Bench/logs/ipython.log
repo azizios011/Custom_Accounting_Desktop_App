@@ -3,3 +3,21 @@
 frappe.db.commit()
 exit()
 2026-04-02 08:21:35,080 INFO ipython === session end ===
+2026-04-03 08:56:48,900 INFO ipython === bench console session ===
+2026-04-03 08:56:48,901 INFO ipython # Check what users exist
+frappe.get_all("User", fields=["name", "enabled"])
+2026-04-03 08:56:48,901 INFO ipython from frappe.utils.password import update_password
+update_password("Administrator", "admin123")
+frappe.db.commit()
+exit()
+2026-04-03 08:56:48,901 INFO ipython === session end ===
+2026-04-03 09:02:27,745 INFO ipython === bench console session ===
+2026-04-03 09:02:27,747 INFO ipython # Check if password was actually saved
+from frappe.utils.password import check_password
+try:
+    check_password("Administrator", "admin123")
+    print("Password is correct")
+except Exception as e:
+    print("Wrong password:", e)
+    
+2026-04-03 09:02:27,747 INFO ipython === session end ===
