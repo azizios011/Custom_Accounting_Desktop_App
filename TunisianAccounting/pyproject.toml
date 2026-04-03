@@ -4,7 +4,7 @@ authors = [
     { name = "Arctic Boy", email = "azizhidri001@gmail.com"}
 ]
 description = "Tunisian ERP Accounting System"
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [

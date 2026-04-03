@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  tunisian-erp:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: tunisian-erp
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - erp-sites:/home/erp/ERP_Bench/sites
+      - erp-logs:/home/erp/ERP_Bench/logs
+    restart: unless-stopped
+
+volumes:
+  erp-sites:
+  erp-logs:

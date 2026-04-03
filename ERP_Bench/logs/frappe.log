@@ -93,3 +93,6 @@ AssertionError: site must be fully initialized, db_name missing
 2026-04-03 09:17:19,203 ERROR frappe New Exception collected in error log
 Site: mysite.local
 Form Dict: {'report_name': 'Profit and Loss Statement', 'filters': '{"filter_based_on":"Fiscal Year","period_start_date":"2020-04-01","period_end_date":"2021-03-31","periodicity":"Yearly","include_default_book_entries":1}', 'ignore_prepared_report': '1', 'cmd': 'frappe.desk.query_report.run'}
+2026-04-03 10:16:53,430 ERROR frappe New Exception collected in error log
+Site: mysite.local
+Form Dict: {'report_name': 'Profit and Loss Statement', 'filters': '{"filter_based_on":"Fiscal Year","period_start_date":"2020-04-01","period_end_date":"2021-03-31","periodicity":"Yearly","include_default_book_entries":1}', 'ignore_prepared_report': '1', 'cmd': 'frappe.desk.query_report.run'}
